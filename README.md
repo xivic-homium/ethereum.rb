@@ -16,12 +16,6 @@ Ethereum Virtual Machine Client is a clone of [ethereum.rb](https://github.com/E
   
 
 ## Installation
-
-  
-Using a RPC node is the prefered solution.
-
-To install gem simply add this line to your application's Gemfile:
-
   
 Using a RPC node is the prefered solution.
 
@@ -488,16 +482,6 @@ client.transfer_and_wait(key, "0x949d7b2C37411eFB763fcDCB234FAb8190e53E2d", amou
 
 ```
 
-  
-### Custom block
-
-You need a full node which support archived data if you want to set a custom block.
- 
-
-```ruby
-client.block_number  = 1
-```
-
 ### Custom gas price and gas limit
 
   
@@ -536,7 +520,9 @@ You can change the block used by the client. Defaulted at `'latest'` if not spec
 
 If the specified block is older than the latest, transactions are impossible, and only contract `call` are available, as the blockchain is immutable.
 
-  
+You need a full node which support archived data if you want to set a custom block.
+
+
 
 ```ruby
 
