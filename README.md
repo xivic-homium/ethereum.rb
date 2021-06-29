@@ -1,7 +1,7 @@
 
 # EvmClient
 
-Ethereum Client is a clone of [ethereum.rb](https://github.com/EthWorks/ethereum.rb), with less bugs and more features.
+Ethereum Virtual Machine Client is a clone of [ethereum.rb](https://github.com/EthWorks/ethereum.rb), with less bugs and more features.
   
 ## What's new
 
