@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Ethereum::Function do
 
   it "calculates id" do
-    expect(Ethereum::Function.calc_id("sam(bytes,bool,uint256[])")).to eq "a5643bf2"
+    expect(Ethereum::Function.calc_id("sam(bytes,bool,uint256[])")).to eq "a5643bf27e2786816613d3eeb0b62650200b5a98766dfcfd4428f296fb56d043"
   end
 
   context "calculates signature without synonyms" do

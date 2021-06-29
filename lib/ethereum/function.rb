@@ -1,19 +1,23 @@
 module Ethereum
   class Function
 
-    attr_accessor :name, :inputs, :outputs, :signature, :constant, :function_string 
+    attr_accessor :name, :inputs, :outputs, :signature, :minified_signature, :constant, :function_string
 
     def initialize(data)
-      @name = data["name"]
+      @name     = data["name"]
       @constant = data["constant"]
-      @inputs = data["inputs"].map do |input|
+
+      @inputs   = data["inputs"].map do |input|
         Ethereum::FunctionInput.new(input)
       end
+
       @outputs = data["outputs"].collect do |output|
         Ethereum::FunctionOutput.new(output)
       end
-      @function_string = self.class.calc_signature(@name, @inputs)
-      @signature = self.class.calc_id(@function_string)
+
+      @function_string    = self.class.calc_signature(@name, @inputs)
+      @signature          = self.class.calc_id(@function_string)
+      @minified_signature = signature[0..7]
     end
 
     def self.to_canonical_type(type)
@@ -29,7 +33,7 @@ module Ethereum
     end
 
     def self.calc_id(signature)
-      Digest::SHA3.hexdigest(signature, 256)[0..7]
+      Digest::SHA3.hexdigest(signature, 256)
     end
 
   end

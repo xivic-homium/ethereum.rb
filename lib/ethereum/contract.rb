@@ -161,7 +161,7 @@ module Ethereum
     end
 
     def call_payload(fun, args)
-      "0x" + fun.signature + (@encoder.encode_arguments(fun.inputs, args).presence || "0"*64)
+      "0x" + fun.minified_signature + (@encoder.encode_arguments(fun.inputs, args))
     end
 
     def call_args(fun, args)
@@ -246,10 +246,10 @@ module Ethereum
       create_event_proxies
       class_methods = Class.new do
         extend Forwardable
-        def_delegators :parent, :deploy_payload, :deploy_args, :call_payload, :call_args
+        def_delegators :parent, :deploy_payload, :deploy_args, :call_payload, :call_args, :functions
         def_delegators :parent, :signed_deploy, :key, :key=
         def_delegators :parent, :gas_limit, :gas_price, :gas_limit=, :gas_price=, :nonce, :nonce=
-        def_delegators :parent, :abi, :deployment, :events
+        def_delegators :parent, :abi, :deployment, :events, :name
         def_delegators :parent, :estimate, :deploy, :deploy_and_wait
         def_delegators :parent, :address, :address=, :sender, :sender=
         def_delegator :parent, :call_raw_proxy, :call_raw
