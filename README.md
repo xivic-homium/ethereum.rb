@@ -323,11 +323,11 @@ raw_events  =  response['result']
 
 
 raw_events.map  do  |event|
-  ::EvmClient::EventLog.build(raw_response:  event, contract:  contract)
+  ::EvmClient::EventLog.build(raw_response:  event, contract:  contract).to_h
 end
 ```
 
-  What is being returned is a collection of `EventLog` containing all of the extracted and decoded data you would need.
+  What is being returned is a collection of Hashes containing all of the extracted and decoded data you would need.
   
 
   
