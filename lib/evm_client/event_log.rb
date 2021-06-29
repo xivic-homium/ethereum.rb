@@ -1,4 +1,4 @@
-module EthereumClient
+module EvmClient
   class EventLog
     attr_reader :address, :block_hash, :block_number, :data, :log_index, :removed,
     :topics, :transaction_hash, :transaction_index, :signature, :contract, :event

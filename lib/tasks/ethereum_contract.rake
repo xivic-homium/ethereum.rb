@@ -5,7 +5,7 @@ namespace :ethereum do
 
     desc "Compile a contract"
     task :compile, [:path] do |_, args|
-      contract = EthereumClient::Solidity.new.compile(args[:path])
+      contract = EvmClient::Solidity.new.compile(args[:path])
       puts "Contract abi:"
       puts contract.map { |k, v| "#{k}: #{v["abi"]}" }.join("\n\n")
       puts
@@ -17,7 +17,7 @@ namespace :ethereum do
     desc "Compile and deploy contract"
     task :deploy, [:path] do |_, args|
       puts "Deploing contract #{args[:path]}"
-      @works = EthereumClient::Contract.create(file: args[:path])
+      @works = EvmClient::Contract.create(file: args[:path])
       @works.deploy_and_wait { puts "." }
       address = @works.deployment.contract_address
       puts "Contract deployed under address: #{address}"

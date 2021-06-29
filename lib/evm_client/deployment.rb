@@ -1,4 +1,4 @@
-module EthereumClient
+module EvmClient
 
   class Deployment
 

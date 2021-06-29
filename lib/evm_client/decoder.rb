@@ -1,4 +1,4 @@
-module EthereumClient
+module EvmClient
   class Decoder
 
     def decode(type, value, start = 0)

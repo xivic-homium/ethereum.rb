@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe EthereumClient::Client do
+describe EvmClient::Client do
 
-    let (:client) { EthereumClient::Client.new }
+    let (:client) { EvmClient::Client.new }
 
     describe '.encode_params' do
       let (:params) { [true, false, 0, 12345, '0x7d84abf0f241b10927b567bd636d95fa9f66ae34', '0x4d5e07d4057dd0c3849c2295d20ee1778fc29d69150e8d75a07207347dce17fa', '0x7d84abf0f241b10927b567bd636d95fa9f66ae34'] }

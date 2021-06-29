@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe EthereumClient::Solidity do
+describe EvmClient::Solidity do
 
-  include EthereumClient::ExplorerUrlHelper
+  include EvmClient::ExplorerUrlHelper
   
   def link_to(label, url, options)
     "<a href=\"#{url}\">#{label}</a>"

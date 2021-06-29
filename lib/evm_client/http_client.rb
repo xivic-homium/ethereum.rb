@@ -1,6 +1,6 @@
 require 'net/http'
 require 'json'
-module EthereumClient
+module EvmClient
   class HttpClient < Client
     attr_accessor :host, :port, :uri, :ssl, :proxy
 

@@ -1,4 +1,4 @@
-module EthereumClient
+module EvmClient
   class ContractEvent
 
     attr_accessor :name, :signature, :input_types, :inputs,

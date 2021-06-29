@@ -1,9 +1,9 @@
 require 'tempfile'
 require 'spec_helper'
 
-describe EthereumClient::IpcClient do
+describe EvmClient::IpcClient do
 
-    subject { EthereumClient::IpcClient.new }
+    subject { EvmClient::IpcClient.new }
     let (:version) { subject.eth_protocol_version["result"] }
 
     it 'is able to connect' do
@@ -15,7 +15,7 @@ describe EthereumClient::IpcClient do
       deleted = Tempfile.new('deleted')
       paths = [deleted.path, real.path]
       deleted.unlink
-      expect(EthereumClient::IpcClient.default_path(paths)).to eq real.path
+      expect(EvmClient::IpcClient.default_path(paths)).to eq real.path
       real.unlink
     end
 

@@ -1,4 +1,4 @@
-module EthereumClient
+module EvmClient
 
   class ContractInitializer
 
@@ -40,7 +40,7 @@ module EthereumClient
     end
 
     def build(connection)
-      @contract = EthereumClient::Contract.new(@name, @binary, @abi, client)
+      @contract = EvmClient::Contract.new(@name, @binary, @abi, client)
       @contract.build(connection)
     end
 

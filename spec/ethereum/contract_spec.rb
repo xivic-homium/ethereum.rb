@@ -1,9 +1,9 @@
 require 'spec_helper'
 require 'eth'
 
-describe EthereumClient::Contract do
+describe EvmClient::Contract do
 
-  class MockClient < EthereumClient::Client
+  class MockClient < EvmClient::Client
     def default_account() "0x27dcb234fab8190e53e2d949d7b2c37411efb72e" end
     def gas_price() nil end
     def gas_limit() nil end
@@ -14,7 +14,7 @@ describe EthereumClient::Contract do
   let(:address) { "0xaf83b6f1162062aa6711de633821f3e66b6fb3a5" }
   let(:abi) { '[{"constant":false,"inputs":[],"name":"kill","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"greet","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"inputs":[{"name":"_greeting","type":"string"}],"payable":false,"type":"constructor"}]' }
   let(:code) { '606060405234610000576040516102c13803806102c1833981016040528051015b5b60008054600160a060020a03191633600160a060020a03161790555b8060019080519060200190828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f1061008957805160ff19168380011785556100b6565b828001600101855582156100b6579182015b828111156100b657825182559160200191906001019061009b565b5b506100d79291505b808211156100d357600081556001016100bf565b5090565b50505b505b6101d6806100eb6000396000f300606060405263ffffffff60e060020a60003504166341c0e1b5811461002f578063cfae32171461003e575b610000565b346100005761003c6100cb565b005b346100005761004b61010d565b604080516020808252835181830152835191928392908301918501908083838215610091575b80518252602083111561009157601f199092019160209182019101610071565b505050905090810190601f1680156100bd5780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b6000543373ffffffffffffffffffffffffffffffffffffffff9081169116141561010a5760005473ffffffffffffffffffffffffffffffffffffffff16ff5b5b565b604080516020808201835260008252600180548451600282841615610100026000190190921691909104601f81018490048402820184019095528481529293909183018282801561019f5780601f106101745761010080835404028352916020019161019f565b820191906000526020600020905b81548152906001019060200180831161018257829003601f168201915b505050505090505b905600a165627a7a72305820293955f201e1545746c248227c00553ddded3cab3195c1f640197fc52fb562600029' }
-  let(:contract) { EthereumClient::Contract.create(name: "Greeter", code: code, abi: abi, client: client, address: address) }
+  let(:contract) { EvmClient::Contract.create(name: "Greeter", code: code, abi: abi, client: client, address: address) }
   let(:eth_send_result) { '{"jsonrpc":"2.0", "result": "", "id": 1}' }
   let(:insufficient_funds_result) { '{"jsonrpc":"2.0","error":{"code":-32010,"message":"Insufficient funds. The account you tried to send transaction from does not have enough funds.","data":null},"id":1}' }
 
@@ -172,21 +172,21 @@ describe EthereumClient::Contract do
     let(:tpaths) { [ './spec/truffle' ] }
 
     it "finds artifacts with explicit path list" do
-      expect(EthereumClient::Contract.find_truffle_artifacts('TestContractOne', tpaths)).not_to eql(nil)
+      expect(EvmClient::Contract.find_truffle_artifacts('TestContractOne', tpaths)).not_to eql(nil)
     end
 
     it "finds artifacts with implicit path list" do
-      expect(EthereumClient::Contract.find_truffle_artifacts('TestContractOne')).to eql(nil)
-      EthereumClient::Contract.truffle_paths.concat(tpaths)
-      expect(EthereumClient::Contract.find_truffle_artifacts('TestContractOne')).not_to eql(nil)
-      EthereumClient::Contract.truffle_paths = []
+      expect(EvmClient::Contract.find_truffle_artifacts('TestContractOne')).to eql(nil)
+      EvmClient::Contract.truffle_paths.concat(tpaths)
+      expect(EvmClient::Contract.find_truffle_artifacts('TestContractOne')).not_to eql(nil)
+      EvmClient::Contract.truffle_paths = []
     end
 
     it "loads contract data from the Truffle artifacts" do
       # net_address is from the artifacts file for network id '1234'
       net_address = '0xc0c32feb41be1f1eba28f3612d3ca7e458974cdb'
-      artifacts = EthereumClient::Contract.find_truffle_artifacts('TestContractOne', tpaths)
-      tcontract = EthereumClient::Contract.create(name: "TestContractOne", truffle: { paths: tpaths }, client: client, address: address)
+      artifacts = EvmClient::Contract.find_truffle_artifacts('TestContractOne', tpaths)
+      tcontract = EvmClient::Contract.create(name: "TestContractOne", truffle: { paths: tpaths }, client: client, address: address)
 
       expect(tcontract.parent.code).to eql(artifacts['bytecode'][2, artifacts['bytecode'].length])
       expect(tcontract.abi).to eql(artifacts['abi'])
@@ -204,7 +204,7 @@ describe EthereumClient::Contract do
       expect(tcontract.transact_and_wait.methods).to include(:add_counter)
       expect(tcontract.transact_and_wait.methods).to include(:remove_counter)
 
-      tcontract = EthereumClient::Contract.create(name: "TestContractOne", truffle: { paths: tpaths }, client: client)
+      tcontract = EvmClient::Contract.create(name: "TestContractOne", truffle: { paths: tpaths }, client: client)
 
       expect(tcontract.address).to eql(net_address)
     end

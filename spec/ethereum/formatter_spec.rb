@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe EthereumClient::Formatter do
+describe EvmClient::Formatter do
 
-  let (:formatter) { EthereumClient::Formatter.new }
+  let (:formatter) { EvmClient::Formatter.new }
 
   it "#to_wei" do
     expect(formatter.to_wei(1)).to eq 1000000000000000000

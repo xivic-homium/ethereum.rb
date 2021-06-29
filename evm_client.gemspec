@@ -1,17 +1,17 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'ethereum_client/version'
+require 'evm_client/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "ethereum_client"
-  spec.version       = EthereumClient::VERSION
+  spec.name          = "evm_client"
+  spec.version       = EvmClient::VERSION
   spec.authors       = ["shideneyu"]
   spec.email         = ["shideneyu@gmail.com"]
 
   spec.summary       = %q{Ruby Ethereum client using the JSON-RPC interface}
-  spec.description   = %q{EthereumClient is Ruby Ethereum client using the JSON-RPC interface. Provides interface for sending transactions, creating and interacting with contracts as well as usefull toolkit to work with Ethereum node.}
-  spec.homepage      = "https://github.com/shideneyu/ethereum_client"
+  spec.description   = %q{EvmClient is Ruby Ethereum client using the JSON-RPC interface. Provides interface for sending transactions, creating and interacting with contracts as well as usefull toolkit to work with Ethereum node.}
+  spec.homepage      = "https://github.com/shideneyu/evm_client"
   spec.license       = "MIT"
 
   if spec.respond_to?(:metadata)

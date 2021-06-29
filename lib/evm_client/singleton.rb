@@ -1,4 +1,4 @@
-class EthereumClient::Singleton
+class EvmClient::Singleton
   
   class << self
 
@@ -23,9 +23,9 @@ class EthereumClient::Singleton
     
     private
       def create_instance
-        return EthereumClient::IpcClient.new(@ipcpath) if @client == :ipc 
-        return EthereumClient::HttpClient.new(@host) if @client == :http
-        EthereumClient::IpcClient.new
+        return EvmClient::IpcClient.new(@ipcpath) if @client == :ipc 
+        return EvmClient::HttpClient.new(@host) if @client == :http
+        EvmClient::IpcClient.new
       end
       
       def configure_instance(instance)

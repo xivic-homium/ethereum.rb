@@ -1,16 +1,16 @@
 require 'spec_helper'
 
-describe EthereumClient::Encoder do
+describe EvmClient::Encoder do
 
-  let (:encoder) { EthereumClient::Encoder.new }
-  let (:decoder) { EthereumClient::Decoder.new }
-  let(:function) { EthereumClient::Function.new(abi) }
+  let (:encoder) { EvmClient::Encoder.new }
+  let (:decoder) { EvmClient::Decoder.new }
+  let(:function) { EvmClient::Function.new(abi) }
 
   it "parse type" do
-    expect(EthereumClient::Abi::parse_type("bool")).to eq ["bool", nil]
-    expect(EthereumClient::Abi::parse_type("uint32")).to eq ["uint", "32"]
-    expect(EthereumClient::Abi::parse_type("bytes32")).to eq ["bytes", "32"]
-    expect(EthereumClient::Abi::parse_type("fixed128x128")).to eq ["fixed", "128x128"]
+    expect(EvmClient::Abi::parse_type("bool")).to eq ["bool", nil]
+    expect(EvmClient::Abi::parse_type("uint32")).to eq ["uint", "32"]
+    expect(EvmClient::Abi::parse_type("bytes32")).to eq ["bytes", "32"]
+    expect(EvmClient::Abi::parse_type("fixed128x128")).to eq ["fixed", "128x128"]
   end
 
   RSpec::Matchers.define :encode_and_decode do |actual|

@@ -6,14 +6,14 @@ namespace :ethereum do
 
     desc "Get info about transaction"
     task :byhash, [:id] do |_, args|
-      @client = EthereumClient::Singleton.instance
+      @client = EvmClient::Singleton.instance
       pp @client.eth_get_transaction_by_hash(args[:id])
     end
 
     desc "Send"
     task :send, [:address, :amount] do |_, args|
-      @client = EthereumClient::Singleton.instance
-      @formatter = EthereumClient::Formatter.new
+      @client = EvmClient::Singleton.instance
+      @formatter = EvmClient::Formatter.new
       address = @formatter.to_address(args[:address])
       value = @client.int_to_hex(@formatter.to_wei(args[:amount].to_f))
       puts "Transfer from: #{@client.default_account} to: #{address}, amount: #{value}wei"

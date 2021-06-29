@@ -1,5 +1,5 @@
 require 'socket'
-module EthereumClient
+module EvmClient
   class IpcClient < Client
     attr_accessor :ipcpath
 

@@ -3,8 +3,8 @@ require 'spec_helper'
 describe "Ethereum Node" do
 
   before(:all) do
-    @client = EthereumClient::IpcClient.new
-    @formatter = EthereumClient::Formatter.new
+    @client = EvmClient::IpcClient.new
+    @formatter = EvmClient::Formatter.new
   end
 
   it 'has supported JSON RPC version' do
