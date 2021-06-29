@@ -321,7 +321,6 @@ response  =  client.eth_get_logs(
 
 raw_events  =  response['result']
 
-  
 
 raw_events.map  do  |event|
   ::EvmClient::EventLog.build(raw_response:  event, contract:  contract)
