@@ -306,7 +306,7 @@ On the other hand `register` method will change contract state, so you need to u
 event_name        =  'my_event_name'
 event_abi         =  contract.abi.find { |abi|  abi['name'] ==  event_name.camelize }
 sig               =  contract.parent.events.find { |e|  e.name.to_s  ==  event_name.camelize }.signature
-topics            = [encoder.ensure_prefix(sig)]
+topics            = [::EvmClient::Encoder.new.ensure_prefix(sig)]
 from_block_number = 1
 from_block        =  "0x#{block_number.to_s(16)}"
 
@@ -314,7 +314,7 @@ response  =  client.eth_get_logs(
   {
     fromBlock:  from_block,
     toBlock:  'latest',
-    address:  contract_address,
+    address:  contract.address,
     topics:  topics
   }
 )
