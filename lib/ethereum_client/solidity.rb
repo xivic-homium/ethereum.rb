@@ -1,7 +1,7 @@
 require 'tmpdir'
 require 'open3'
 
-module Ethereum
+module EthereumClient
   class CompilationError < StandardError;
     def initialize(msg)
       super

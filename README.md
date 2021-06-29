@@ -1,8 +1,7 @@
 
 # EthereumClient
 
-Ethereum Client is a clone of ethereum.rb, with less bugs and more features.
-
+Ethereum Client is a clone of [ethereum.rb](https://github.com/EthWorks/ethereum.rb), with less bugs and more features.
   
 ## What's new
 
@@ -11,12 +10,17 @@ Ethereum Client is a clone of ethereum.rb, with less bugs and more features.
 * Compatible with OpenEthereum
 * Compatible with complex ABIs
 * More tools to parse Events à la Web3Js
-* Proof tested with Ethereum, Binance Chain and Polygon
+* Battle tested with Ethereum, Binance Chain and Polygon
 * Can interact with old blockchain snapchots, if provided an old block as parameter
 
   
 
 ## Installation
+
+  
+Using a RPC node is the prefered solution.
+
+To install gem simply add this line to your application's Gemfile:
 
   
 Using a RPC node is the prefered solution.
@@ -35,19 +39,17 @@ gem  'ethereum_client'
 
 And then execute:
 
-  
-
-$ bundle
-
+```shell
+bundle
+```
   
 
 Or install it yourself as:
 
   
-
-$ gem install ethereum.rb
-
-  
+```
+gem install ethereum.rb
+```
 
 ## Basic Usage
 
@@ -59,7 +61,7 @@ You can create contract from solidity source and deploy it to the blockchain, wi
 
 ```ruby
 
-contract  =  Ethereum::Contract.create(file:  "greeter.sol")
+contract  =  EthereumClient::Contract.create(file:  "greeter.sol")
 
 address  =  contract.deploy_and_wait("Hello from ethereum.rb!")
 
@@ -85,7 +87,6 @@ You can see example contract [greeter here](https://github.com/marekkirejczyk/ru
 
 > If contract method name uses camel case you must convert it to snake case when use call: `call.your_method`.
 
-  
 
 ## Smart contracts
 
@@ -101,7 +102,7 @@ If you want to complie multiple contracts at once, you can create new instances 
 
 ```ruby
 
-Ethereum::Contract.create(file:  "mycontracts.sol", client:  client)
+EthereumClient::Contract.create(file:  "mycontracts.sol", client:  client)
 
 contract  =  MyContract1.new
 
@@ -133,7 +134,7 @@ The other way to obtain contract instance is get one that already exist in the b
 
 ```ruby
 
-contract  =  Ethereum::Contract.create(name:  "MyContract", address:  "0x01a4d1A62F01ED966646acBfA8BB0b59960D06dd ", abi:  abi)
+contract  =  EthereumClient::Contract.create(name:  "MyContract", address:  "0x01a4d1A62F01ED966646acBfA8BB0b59960D06dd ", abi:  abi)
 
 ```
 
@@ -149,7 +150,7 @@ Alternatively you can obtain abi definition and name from contract source file:
 
 ```ruby
 
-contract  =  Ethereum::Contract.create(file:  "MyContract.sol", address:  "0x01a4d1A62F01ED966646acBfA8BB0b59960D06dd ")
+contract  =  EthereumClient::Contract.create(file:  "MyContract.sol", address:  "0x01a4d1A62F01ED966646acBfA8BB0b59960D06dd ")
 
 ```
 
@@ -161,7 +162,7 @@ If you want to create new contract, that is not yet deployed from ABI definition
 
 ```ruby
 
-contract  =  Ethereum::Contract.create(name:  "MyContract", abi:  abi, code:  "...")
+contract  =  EthereumClient::Contract.create(name:  "MyContract", abi:  abi, code:  "...")
 
 ```
 
@@ -179,7 +180,7 @@ a contract. For example, if you have a MyContract in the Truffle directory at `/
 
 ```ruby
 
-contract  =  Ethereum::Contract.create(name:  "MyContract", truffle: { paths: [ '/my/truffle/project' ] }, client:  client, address:  '0x01a4d1A62F01ED966646acBfA8BB0b59960D06dd')
+contract  =  EthereumClient::Contract.create(name:  "MyContract", truffle: { paths: [ '/my/truffle/project' ] }, client:  client, address:  '0x01a4d1A62F01ED966646acBfA8BB0b59960D06dd')
 
 ```
 
@@ -191,7 +192,7 @@ The contract factory will attempt to load the deployed address from the Truffle 
 
 ```ruby
 
-contract  =  Ethereum::Contract.create(name:  "MyContract", truffle: { paths: [ '/my/truffle/project' ] }, client:  client)
+contract  =  EthereumClient::Contract.create(name:  "MyContract", truffle: { paths: [ '/my/truffle/project' ] }, client:  client)
 
 ```
 
@@ -323,7 +324,7 @@ raw_events  =  response['result']
   
 
 raw_events.map  do  |event|
-  ::Ethereum::EventLog.build(raw_response:  event, contract:  contract)
+  ::EthereumClient::EventLog.build(raw_response:  event, contract:  contract)
 end
 ```
 
@@ -342,13 +343,13 @@ Default client communicate via IPC. If you want to create custom client or use m
 
   
 
-To create IPC client instance of simply create Ethereum::IpcClient:
+To create IPC client instance of simply create EthereumClient::IpcClient:
 
   
 
 ```ruby
 
-client  =  Ethereum::IpcClient.new
+client  =  EthereumClient::IpcClient.new
 
 ```
 
@@ -360,7 +361,7 @@ You can also customize it with path to ipc file path and logging flag:
 
 ```ruby
 
-client  =  Ethereum::IpcClient.new("~/.parity/mycustom.ipc", false)
+client  =  EthereumClient::IpcClient.new("~/.parity/mycustom.ipc", false)
 
 ```
 
@@ -382,7 +383,7 @@ To create Http client use following:
 
 ```ruby
 
-client  =  Ethereum::HttpClient.new('http://localhost:8545')
+client  =  EthereumClient::HttpClient.new('http://localhost:8545')
 
 ```
 
@@ -394,7 +395,7 @@ You can supply client when creating a contract:
 
 ```ruby
 
-contract  =  Ethereum::Contract.create(client:  client, ...)
+contract  =  EthereumClient::Contract.create(client:  client, ...)
 
 ```
 
@@ -406,7 +407,7 @@ You can also obtain default client:
 
 ```ruby
 
-client  =  Ethereum::Singleton.instance
+client  =  EthereumClient::Singleton.instance
 
 ```
 
@@ -464,7 +465,7 @@ Then you can use the key to deploy contracts and send transactions, i.e.:
 
 ```ruby
 
-contract  =  Ethereum::Contract.create(file:  "...")
+contract  =  EthereumClient::Contract.create(file:  "...")
 
 contract.key  =  key
 

@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe Ethereum::HttpClient do
+describe EthereumClient::HttpClient do
 
-  subject { Ethereum::HttpClient.new('http://localhost:8545') }
+  subject { EthereumClient::HttpClient.new('http://localhost:8545') }
   let (:version) { subject.eth_protocol_version["result"] }
 
   it 'is able to connect' do

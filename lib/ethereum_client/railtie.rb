@@ -1,4 +1,4 @@
-module Ethereum
+module EthereumClient
 
   class Railtie < Rails::Railtie
     rake_tasks do

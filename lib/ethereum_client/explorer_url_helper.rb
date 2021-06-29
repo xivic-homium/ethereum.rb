@@ -1,4 +1,4 @@
-module Ethereum
+module EthereumClient
   module ExplorerUrlHelper
 
     CHAIN_PREFIX = {
@@ -17,7 +17,7 @@ module Ethereum
       link_to label, explorer_path("address/#{address}"), {target: "_blank"}.merge(opts)
     end
 
-    def explorer_path(suffix, version = Ethereum::Singleton.instance.get_chain)
+    def explorer_path(suffix, version = EthereumClient::Singleton.instance.get_chain)
       prefix = CHAIN_PREFIX.fetch(version, "")
       "https://#{prefix}etherscan.io/#{suffix}"
     end

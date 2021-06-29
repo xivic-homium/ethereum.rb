@@ -1,5 +1,5 @@
 require 'forwardable'
-module Ethereum
+module EthereumClient
   class Contract
 
     attr_reader :address
@@ -10,12 +10,12 @@ module Ethereum
     attr_accessor :call_raw_proxy, :call_proxy, :transact_proxy, :transact_and_wait_proxy
     attr_accessor :new_filter_proxy, :get_filter_logs_proxy, :get_filter_change_proxy
 
-    def initialize(name, code, abi, client = Ethereum::Singleton.instance)
+    def initialize(name, code, abi, client = EthereumClient::Singleton.instance)
       @name = name
       @code = code
       @abi = abi
-      @constructor_inputs, @functions, @events = Ethereum::Abi.parse_abi(abi)
-      @formatter = Ethereum::Formatter.new
+      @constructor_inputs, @functions, @events = EthereumClient::Abi.parse_abi(abi)
+      @formatter = EthereumClient::Formatter.new
       @client = client
       @sender = client.default_account
       @encoder = Encoder.new
@@ -35,7 +35,7 @@ module Ethereum
     #
     # @param opts [Hash] Options to the method.
     # @option opts [String] :file Path to the Solidity source that contains the contract code.
-    # @option opts [Ethereum::Singleton] :client The client to use.
+    # @option opts [EthereumClient::Singleton] :client The client to use.
     # @option opts [String] :code The hex representation of the contract's bytecode.
     # @option opts [Array,String] :abi The contract's ABI; a string is assumed to contain a JSON representation
     #  of the ABI.
@@ -49,12 +49,12 @@ module Ethereum
     #  - *:paths* An array of strings containing the list of paths where to look up Truffle artifacts files.
     #    See also {#find_truffle_artifacts}.
     #
-    # @return [Ethereum::Contract] Returns a contract wrapper.
+    # @return [EthereumClient::Contract] Returns a contract wrapper.
 
-    def self.create(file: nil, client: Ethereum::Singleton.instance, code: nil, abi: nil, address: nil, name: nil, contract_index: nil, truffle: nil)
+    def self.create(file: nil, client: EthereumClient::Singleton.instance, code: nil, abi: nil, address: nil, name: nil, contract_index: nil, truffle: nil)
       contract = nil
       if file.present?
-        contracts = Ethereum::Initializer.new(file, client).build_all
+        contracts = EthereumClient::Initializer.new(file, client).build_all
         raise "No contracts compiled" if contracts.empty?
         if contract_index
           contract = contracts[contract_index].class_object.new
@@ -85,7 +85,7 @@ module Ethereum
         else
           abi = abi.is_a?(String) ? JSON.parse(abi) : abi.map(&:deep_stringify_keys)
         end
-        contract = Ethereum::Contract.new(name, code, abi, client)
+        contract = EthereumClient::Contract.new(name, code, abi, client)
         contract.build
         contract = contract.class_object.new
       end
@@ -142,7 +142,7 @@ module Ethereum
       end
       tx_failed = tx.nil? || tx == "0x0000000000000000000000000000000000000000000000000000000000000000"
       raise IOError, "Failed to deploy, did you unlock #{sender} account? Transaction hash: #{tx}" if tx_failed
-      @deployment = Ethereum::Deployment.new(tx, @client)
+      @deployment = EthereumClient::Deployment.new(tx, @client)
     end
 
     def deploy_and_wait(*params, **args, &block)
@@ -191,7 +191,7 @@ module Ethereum
       else
         tx = send_transaction(call_args(fun, args))
       end
-      return Ethereum::Transaction.new(tx, @client, call_payload(fun, args), args)
+      return EthereumClient::Transaction.new(tx, @client, call_payload(fun, args), args)
     end
 
     def transact_and_wait(fun, *args)
@@ -211,7 +211,7 @@ module Ethereum
     end
 
     def parse_filter_data(evt, logs)
-      formatter = Ethereum::Formatter.new
+      formatter = EthereumClient::Formatter.new
       collection = []
       logs["result"].each do |result|
         inputs = evt.input_types
@@ -263,8 +263,8 @@ module Ethereum
           parent
         end
       end
-      Ethereum::Contract.send(:remove_const, class_name) if Ethereum::Contract.const_defined?(class_name, false)
-      Ethereum::Contract.const_set(class_name, class_methods)
+      EthereumClient::Contract.send(:remove_const, class_name) if EthereumClient::Contract.const_defined?(class_name, false)
+      EthereumClient::Contract.const_set(class_name, class_methods)
       @class_object = class_methods
     end
 

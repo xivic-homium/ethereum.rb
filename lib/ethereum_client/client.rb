@@ -1,4 +1,4 @@
-module Ethereum
+module EthereumClient
   class Client
 
     DEFAULT_GAS_LIMIT    = 4_000_000.freeze
@@ -17,7 +17,7 @@ module Ethereum
       @id           = 0
       @log          = log
       @batch        = nil
-      @formatter    = ::Ethereum::Formatter.new
+      @formatter    = ::EthereumClient::Formatter.new
       @gas_price    = DEFAULT_GAS_PRICE
       @gas_limit    = DEFAULT_GAS_LIMIT
       @block_number = DEFAULT_BLOCK_NUMBER
@@ -109,7 +109,7 @@ module Ethereum
     end
     
     def wait_for(tx)
-      transaction = Ethereum::Transaction.new(tx, self, "", [])
+      transaction = EthereumClient::Transaction.new(tx, self, "", [])
       transaction.wait_for_miner
       return transaction
     end

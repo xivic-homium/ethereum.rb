@@ -5,7 +5,7 @@ require 'ethereum/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "ethereum.rb"
-  spec.version       = Ethereum::VERSION
+  spec.version       = EthereumClient::VERSION
   spec.authors       = ["Marek Kirejczyk"]
   spec.email         = ["marek.kirejczyk@gmail.com"]
 

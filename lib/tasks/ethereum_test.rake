@@ -3,7 +3,7 @@ namespace :ethereum do
 
     desc "Setup testing environment for ethereum node"
     task :setup do
-      @client = Ethereum::Singleton.instance
+      @client = EthereumClient::Singleton.instance
 
       network_id = @client.net_version["result"].to_i
       raise "Error: Run your tests on goerli testnet. Use rake ethereum:node:test to run node. Net id: #{network_id}" if network_id != 5
@@ -17,7 +17,7 @@ namespace :ethereum do
       end
 
       balance = @client.eth_get_balance(@client.default_account)["result"]
-      formatter = Ethereum::Formatter.new
+      formatter = EthereumClient::Formatter.new
       balance = formatter.to_int(balance)
       balance = formatter.from_wei(balance).to_f
 

@@ -1,9 +1,9 @@
 require 'eth'
 require 'spec_helper'
 
-describe Ethereum do
+describe EthereumClient do
 
-  let(:client) { Ethereum::Singleton.instance }
+  let(:client) { EthereumClient::Singleton.instance }
   let(:path) { "#{Dir.pwd}/spec/fixtures/TestContract.sol" }
   let(:private_hex) { "3a9f0de356f75c0af771119c6ada8c6f911d61a07bd3efcf91eedb28bd42e83f" }
   let(:key) { Eth::Key.new priv: private_hex }
@@ -11,7 +11,7 @@ describe Ethereum do
 
   it "deploys with key set value and checks value", blockchain: true do
     client.transfer_to_and_wait(key.address, 1000_000_000_000_000_000)
-    contract = Ethereum::Contract.create(file: path)
+    contract = EthereumClient::Contract.create(file: path)
     contract.key = key
     contract.deploy_and_wait("Aloha!")
     contract.transact_and_wait.set("greeting", "Aloha!")

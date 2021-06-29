@@ -1,9 +1,9 @@
-module Ethereum
+module EthereumClient
 
   class Initializer
     attr_accessor :contracts, :file, :client
 
-    def initialize(file, client = Ethereum::Singleton.instance)
+    def initialize(file, client = EthereumClient::Singleton.instance)
       @client = client
       sol_output = Solidity.new.compile(file)
       contracts = sol_output.keys

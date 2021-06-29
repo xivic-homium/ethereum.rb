@@ -1,4 +1,4 @@
-module Ethereum
+module EthereumClient
   class FunctionInput
 
     attr_accessor :type, :name, :indexed

@@ -29,10 +29,10 @@ namespace :ethereum do
 
     desc "Check if node is syncing"
     task :waitforsync do
-      formatter = Ethereum::Formatter.new
+      formatter = EthereumClient::Formatter.new
       begin
         loop do
-           result = Ethereum::Singleton.instance.eth_syncing["result"]
+           result = EthereumClient::Singleton.instance.eth_syncing["result"]
            unless result
              puts "Synced"
              break

@@ -1,4 +1,4 @@
-module Ethereum
+module EthereumClient
   class Function
 
     attr_accessor :name, :inputs, :outputs, :signature, :minified_signature, :constant, :function_string
@@ -8,11 +8,11 @@ module Ethereum
       @constant = data["constant"]
 
       @inputs   = data["inputs"].map do |input|
-        Ethereum::FunctionInput.new(input)
+        EthereumClient::FunctionInput.new(input)
       end
 
       @outputs = data["outputs"].collect do |output|
-        Ethereum::FunctionOutput.new(output)
+        EthereumClient::FunctionOutput.new(output)
       end
 
       @function_string    = self.class.calc_signature(@name, @inputs)
