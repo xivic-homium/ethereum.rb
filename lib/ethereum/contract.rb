@@ -87,6 +87,7 @@ module Ethereum
           abi = abi.is_a?(String) ? JSON.parse(abi) : abi.map(&:deep_stringify_keys)
         end
         contract = Ethereum::Contract.new(name, code, abi, client)
+        contract.address = address
         contract.build
         contract = contract.class_object.new
       end
