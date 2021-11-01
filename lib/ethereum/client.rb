@@ -14,6 +14,7 @@ module Ethereum
     attr_accessor :command, :id, :log, :logger, :default_account, :gas_price, :gas_limit
 
     def initialize(log = false)
+      Rails.logger.info('initialize(log = false)')
       @id = 0
       @log = log
       @batch = nil
@@ -26,12 +27,14 @@ module Ethereum
     end
 
     def self.create(host_or_ipcpath, log = false)
+      Rails.logger.info('self.create(host_or_ipcpath, log = false)')
       return IpcClient.new(host_or_ipcpath, log) if host_or_ipcpath.end_with? '.ipc'
       return HttpClient.new(host_or_ipcpath, log) if host_or_ipcpath.start_with? 'http'
       raise ArgumentError.new('Unable to detect client type')
     end
 
     def batch
+      Rails.logger.info('batch')
       @batch = []
 
       yield
@@ -44,49 +47,61 @@ module Ethereum
     end
 
     def get_id
+      Rails.logger.info('get_id')
       @id += 1
       return @id
     end
 
     def reset_id
+      Rails.logger.info('reset_id')
       @id = 0
+      Rails.logger.info('reset_id 2')
     end
 
     def default_account
+      Rails.logger.info('default_account')
       @default_account ||= eth_accounts["result"][0]
     end
 
     def int_to_hex(p)
+      Rails.logger.info('int_to_hex(p)')
       p.is_a?(Integer) ? "0x#{p.to_s(16)}" : p 
     end
 
     def encode_params(params)
+      Rails.logger.info('encode_params(params)')
       params.map(&method(:int_to_hex))
     end
 
     def get_balance(address)
+      Rails.logger.info('get_balance(address)')
       eth_get_balance(address)["result"].to_i(16)
     end
 
     def get_chain
+      Rails.logger.info('get_chain')
       @net_version ||= net_version["result"].to_i
     end
 
     def get_nonce(address)
+      Rails.logger.info('get_nonce(address)')
       eth_get_transaction_count(address, "pending")["result"].to_i(16)
     end
     
 
     def transfer_to(address, amount)
+      Rails.logger.info('transfer_to(address, amount)')
       eth_send_transaction({to: address, value: int_to_hex(amount)})
     end
 
     def transfer_to_and_wait(address, amount)
+      Rails.logger.info('transfer_to_and_wait(address, amount)')
       wait_for(transfer_to(address, amount)["result"])
     end
 
 
     def transfer(key, address, amount)
+      Rails.logger.info('transfer(key, address, amount)')
       Eth.configure { |c| c.chain_id = net_version["result"].to_i }
       args = { 
         from: key.address,
@@ -103,16 +118,19 @@ module Ethereum
     end
     
     def transfer_and_wait(key, address, amount)
+      Rails.logger.info('transfer_and_wait(key, address, amount)')
       return wait_for(transfer(key, address, amount))
     end
     
     def wait_for(tx)
+      Rails.logger.info('wait_for(tx)')
       transaction = Ethereum::Transaction.new(tx, self, "", [])
       transaction.wait_for_miner
       return transaction
     end
 
     def send_command(command,args)
+      Rails.logger.info('send_command(command,args)')
       if ["eth_getBalance", "eth_call"].include?(command)
         args << "latest"
       end
