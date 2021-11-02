@@ -86,13 +86,10 @@ module Ethereum
         else
           abi = abi.is_a?(String) ? JSON.parse(abi) : abi.map(&:deep_stringify_keys)
         end
-        Rails.logger.info('========================================================================================1')
         contract = Ethereum::Contract.new(name, code, abi, client)
         contract.address = address
         contract.build
-        Rails.logger.info('========================================================================================2')
         contract = contract.class_object.new
-        Rails.logger.info('========================================================================================3')
       end
       contract.address = address
       contract
@@ -174,15 +171,8 @@ module Ethereum
     end
 
     def call_raw(fun, *args)
-      Rails.logger.info("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ 1")
-      Rails.logger.info(fun)
-      Rails.logger.info("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ 2")
-      Rails.logger.info(args)
-      Rails.logger.info("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ 3")
       raw_result = @client.eth_call(call_args(fun, args))["result"]
-      Rails.logger.info("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ 4")
       output = @decoder.decode_arguments(fun.outputs, raw_result)
-      Rails.logger.info("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ 5")
       return {data: call_payload(fun, args), raw: raw_result, formatted: output}
     end
 
