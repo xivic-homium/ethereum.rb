@@ -12,6 +12,7 @@ module Ethereum
     attr_accessor :new_filter_proxy, :get_filter_logs_proxy, :get_filter_change_proxy
 
     def initialize(name, code, abi, client = Ethereum::Singleton.instance)
+      Rails.logger.info('----++++---- contract.rb  initialize')
       @name = name
       @code = code
       @abi = abi
@@ -53,6 +54,7 @@ module Ethereum
     # @return [Ethereum::Contract] Returns a contract wrapper.
 
     def self.create(file: nil, client: Ethereum::Singleton.instance, code: nil, abi: nil, address: nil, name: nil, contract_index: nil, truffle: nil)
+      Rails.logger.info('----++++---- contract.rb  self.create')
       contract = nil
       if file.present?
         contracts = Ethereum::Initializer.new(file, client).build_all
@@ -96,6 +98,7 @@ module Ethereum
     end
 
     def address=(addr)
+      Rails.logger.info('----++++---- contract.rb  address')
       @address = addr
       @events.each do |event|
         event.set_address(addr)
@@ -104,6 +107,7 @@ module Ethereum
     end
 
     def deploy_payload(params)
+      Rails.logger.info('----++++---- contract.rb  deploy_payload')
       if @constructor_inputs.present?
         raise ArgumentError, "Wrong number of arguments in a constructor" and return if params.length != @constructor_inputs.length
       end
@@ -112,14 +116,17 @@ module Ethereum
     end
 
     def deploy_args(params)
+      Rails.logger.info('----++++---- contract.rb  deploy_args')
       add_gas_options_args({from: sender, data: deploy_payload(params)})
     end
 
     def send_transaction(tx_args)
+      Rails.logger.info('----++++---- contract.rb  send_transaction')
         @client.eth_send_transaction(tx_args)["result"]
     end
 
     def send_raw_transaction(payload, to = nil)
+      Rails.logger.info('----++++---- contract.rb  send_raw_transaction')
       Eth.configure { |c| c.chain_id = @client.net_version["result"].to_i }
       @nonce ||= @client.get_nonce(key.address)
       args = {
@@ -137,6 +144,7 @@ module Ethereum
     end
 
     def deploy(*params)
+      Rails.logger.info('----++++---- contract.rb  deploy')
       if key
         tx = send_raw_transaction(deploy_payload(params))
       else
@@ -148,6 +156,7 @@ module Ethereum
     end
 
     def deploy_and_wait(*params, **args, &block)
+      Rails.logger.info('----++++---- contract.rb  deploy_and_wait')
       deploy(*params)
       @deployment.wait_for_deployment(**args, &block)
       self.events.each do |event|
@@ -158,25 +167,30 @@ module Ethereum
     end
 
     def estimate(*params)
+      Rails.logger.info('----++++---- contract.rb  estimate')
       result = @client.eth_estimate_gas(deploy_args(params))
       @decoder.decode_int(result["result"])
     end
 
     def call_payload(fun, args)
+      Rails.logger.info('----++++---- contract.rb  call_payload')
       "0x" + fun.signature + (@encoder.encode_arguments(fun.inputs, args).presence || "0"*64)
     end
 
     def call_args(fun, args)
+      Rails.logger.info('----++++---- contract.rb  call_args')
       add_gas_options_args({to: @address, from: @sender, data: call_payload(fun, args)})
     end
 
     def call_raw(fun, *args)
+      Rails.logger.info('----++++---- contract.rb  call_raw')
       raw_result = @client.eth_call(call_args(fun, args))["result"]
       output = @decoder.decode_arguments(fun.outputs, raw_result)
       return {data: call_payload(fun, args), raw: raw_result, formatted: output}
     end
 
     def call(fun, *args)
+      Rails.logger.info('----++++---- contract.rb  call')
       output = call_raw(fun, *args)[:formatted]
       if output.length == 1
         return output[0]
@@ -186,6 +200,7 @@ module Ethereum
     end
 
     def transact(fun, *args)
+      Rails.logger.info('----++++---- contract.rb  transact')
       if key
         tx = send_raw_transaction(call_payload(fun, args), address)
       else
@@ -195,12 +210,14 @@ module Ethereum
     end
 
     def transact_and_wait(fun, *args)
+      Rails.logger.info('----++++---- contract.rb  transact_and_wait')
       tx = transact(fun, *args)
       tx.wait_for_miner
       return tx
     end
 
     def create_filter(evt, **params)
+      Rails.logger.info('----++++---- contract.rb  create_filter')
       params[:to_block] ||= "latest"
       params[:from_block] ||= "0x0"
       params[:address] ||= @address
@@ -211,6 +228,7 @@ module Ethereum
     end
 
     def parse_filter_data(evt, logs)
+      Rails.logger.info('----++++---- contract.rb  parse_filter_data')
       formatter = Ethereum::Formatter.new
       collection = []
       logs["result"].each do |result|
@@ -226,20 +244,24 @@ module Ethereum
     end
 
     def get_filter_logs(evt, filter_id)
+      Rails.logger.info('----++++---- contract.rb  get_filter_logs')
       parse_filter_data evt, @client.eth_get_filter_logs(filter_id)
     end
 
     def get_filter_changes(evt, filter_id)
+      Rails.logger.info('----++++---- contract.rb  get_filter_changes')
       parse_filter_data evt, @client.eth_get_filter_changes(filter_id)
     end
 
     def function_name(fun)
+      Rails.logger.info('----++++---- contract.rb  function_name')
       count = functions.select {|x| x.name == fun.name }.count
       name = (count == 1) ? "#{fun.name.underscore}" : "#{fun.name.underscore}__#{fun.inputs.collect {|x| x.type}.join("__")}"
       name.to_sym
     end
 
     def build
+      Rails.logger.info('----++++---- contract.rb  build')
       class_name = @name.camelize
       parent = self
       create_function_proxies
@@ -273,6 +295,7 @@ module Ethereum
     # @return [Array<String>] Returns the array containing the list of lookup paths.
 
     def self.truffle_paths()
+      Rails.logger.info('----++++---- contract.rb  self.truffle_paths')
       @truffle_paths = [] unless @truffle_paths
       @truffle_paths
     end
@@ -283,6 +306,7 @@ module Ethereum
     #  converted to the empty array.
 
     def self.truffle_paths=(paths)
+      Rails.logger.info('----++++---- contract.rb  self.truffle_paths')
       @truffle_paths = (paths.is_a?(Array)) ? paths : []
     end
 
@@ -298,6 +322,7 @@ module Ethereum
     #  was found, returns `nil`.
 
     def self.find_truffle_artifacts(name, paths = [])
+      Rails.logger.info('----++++---- contract.rb  self.find_truffle_artifacts')
       subpath = File.join('build', 'contracts', "#{name}.json")
 
       found = paths.concat(truffle_paths).find { |p| File.file?(File.join(p, subpath)) }
@@ -310,12 +335,15 @@ module Ethereum
 
     private
       def add_gas_options_args(args)
+        Rails.logger.info('----++++---- contract.rb  add_gas_options_args')
         args[:gas] = @client.int_to_hex(gas_limit) if gas_limit.present?
         args[:gasPrice] = @client.int_to_hex(gas_price) if gas_price.present?
         args
       end
 
       def create_function_proxies
+        Rails.logger.info('----++++---- contract.rb  create_function_proxies')
+        Rails.logger.info('----++++---- contract.rb ')
         parent = self
         call_raw_proxy, call_proxy, transact_proxy, transact_and_wait_proxy = Class.new, Class.new, Class.new, Class.new
         @functions.each do |fun|
@@ -328,6 +356,7 @@ module Ethereum
       end
 
       def create_event_proxies
+        Rails.logger.info('----++++---- contract.rb  create_event_proxies')
         parent = self
         new_filter_proxy, get_filter_logs_proxy, get_filter_change_proxy = Class.new, Class.new, Class.new
         events.each do |evt|
