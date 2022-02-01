@@ -122,8 +122,8 @@ module Ethereum
         args << "latest"
       end
 
-      args[:gas] = '0x0'
-      args[:gasPrice] = '0x0'
+      # args[:gas] = '0x0'
+      # args[:gasPrice] = '0x0'
 
       payload = {jsonrpc: "2.0", method: command, params: encode_params(args), id: get_id}
       @logger.info("Sending #{payload.to_json}") if @log
