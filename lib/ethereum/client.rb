@@ -113,6 +113,11 @@ module Ethereum
     end
 
     def send_command(command,args)
+      Rails.logger.info('----++++---- client.rb  send_command(command,args)')
+      Rails.logger.info(command)
+      Rails.logger.info('----++++---- client.rb  send_command(command,args) ===============================================')
+      Rails.logger.info(args)
+      Rails.logger.info('----++++---- client.rb  send_command(command,args) <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
       if ["eth_getBalance", "eth_call"].include?(command)
         args << "latest"
       end
