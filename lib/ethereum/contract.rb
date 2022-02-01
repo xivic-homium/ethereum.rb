@@ -338,6 +338,7 @@ module Ethereum
         Rails.logger.info('----++++---- contract.rb  add_gas_options_args')
         args[:gas] = @client.int_to_hex(gas_limit) if gas_limit.present?
         args[:gasPrice] = @client.int_to_hex(gas_price) if gas_price.present?
+        Rails.logger.info("----++++---- contract.rb  ARGS: #{args}")
         args
       end
 
