@@ -122,7 +122,7 @@ module Ethereum
         args << "latest"
       end
 
-      args[0][:gas] = '0x0' if args.dig(0, :gas)
+      args[0][:gas] = '0x1ffffffffffffe' if args.dig(0, :gas)
       args[0][:gasPrice] = '0x0' if args.dig(0, :gasPrice)
 
       payload = {jsonrpc: "2.0", method: command, params: encode_params(args), id: get_id}
