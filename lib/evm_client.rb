@@ -11,5 +11,5 @@ module EvmClient
     require_relative path unless path.match?(/rail/)
   end
 
-  require_relative 'ethereum/railtie' if defined?(Rails)
+  require_relative 'evm_client/railtie' if defined?(Rails)
 end
